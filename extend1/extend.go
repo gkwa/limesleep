@@ -1,28 +1,33 @@
 package extend1
 
-import "fmt"
+import "encoding/json"
 
-type originalStruct struct {
+type OriginalStruct struct {
 	Field1 string
 	Field2 int
 }
 
-type extendedStruct struct {
-	originalStruct
+type ExtendedStruct struct {
+	OriginalStruct
 	ExtraField string
 }
 
+func (e *ExtendedStruct) String() string {
+	jsonBytes, err := json.MarshalIndent(e, "", "    ")
+	if err != nil {
+		return "Error marshaling struct to JSON"
+	}
+	return string(jsonBytes)
+}
+
 func Main() {
-	obj := extendedStruct{
-		originalStruct: originalStruct{
+	obj := ExtendedStruct{
+		OriginalStruct: OriginalStruct{
 			Field1: "value1",
 			Field2: 42,
 		},
 		ExtraField: "extraValue",
 	}
 
-	fmt.Println(obj.Field1)
-	fmt.Println(obj.Field2)
-
-	fmt.Println(obj.ExtraField)
+	println(obj.String())
 }
